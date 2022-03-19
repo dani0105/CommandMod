@@ -3,7 +3,7 @@ _A simple command console for Spaceflight Simulator and API for modders._
 
 ## How to install
 It is necessary to install modloader, you can download it at this [link](https://github.com/105-Code/SFS-Modloader/releases).
-This mod is easy to install, all you need to do is go to [release] (https://github.com/dani0105/CommandMod/releases) and download the version you need, then download `CommandMod.zip` and put it in the `MODS` folder where you have SFS installed, then unzip your file and you will get something like `CommandMod` folder with `CommandMod.dll` file inside. Now run your game and if you press `P` the console will appear.
+This mod is easy to install, all you need to do is go to [release](https://github.com/dani0105/CommandMod/releases) and download the version you need, then download `CommandMod.zip` and put it in the `MODS` folder where you have SFS installed, then unzip your file and you will get something like `CommandMod` folder with `CommandMod.dll` file inside. Now run your game and if you press `P` the console will appear.
 
 ## How to Use
 To use this mod, you just need to press `P` and type the command you need. If you need to know what commands are installed, type `/help`, this command will show you all installed commands.
@@ -43,7 +43,7 @@ namespace MyMod
       // get command mod instance
       CommandMod.CommandMod commandMod = (CommandMod.CommandMod) Loader.main.getMod("commandMod");
       // create my command
-      ConsoleCommand helloWorld = new ConsoleCommand("helloworld","Write Hello World!", "/helloworld",this.helloWorld);
+      ConsoleCommand helloWorld = new ConsoleCommand("helloworld","Print 'Hello World!'", "/helloworld",this.helloWorld);
       // register my command
       commandMod.registerCommand(helloWorld);
     }
