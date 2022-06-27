@@ -1,9 +1,12 @@
-﻿using System;
+﻿using ModLoader.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static SFS.Input.KeybindingsPC;
 
 namespace CommandMod.UI
 {
@@ -55,6 +58,24 @@ namespace CommandMod.UI
             this._containerStyle = new GUIStyle();
             this._messages = new GUIContent();
             this._inputHeigth = GUILayout.Height(30);
+
+            SceneHelper.OnBuildSceneLoaded += this.onBuilder;
+            SceneHelper.OnWorldSceneLoaded += this.onWorld;
+        }
+
+        private void onBuilder(Scene scene)
+        {
+            KeySettings.AddOnKeyDown_Build(KeySettings.Main.Toggle_Console, this.toggleConsole);
+        }
+
+        private void onWorld(Scene scene)
+        {
+            KeySettings.AddOnKeyDown_World(KeySettings.Main.Toggle_Console, this.toggleConsole);
+        }
+
+        private void toggleConsole()
+        {
+            this._isVisible = !this._isVisible;
         }
 
         private void Start()
@@ -89,14 +110,6 @@ namespace CommandMod.UI
             result.SetPixels(pix);
             result.Apply();
             return result;
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                this._isVisible = !this._isVisible;
-            }
         }
 
         private void OnGUI()

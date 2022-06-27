@@ -1,6 +1,7 @@
 ﻿using CommandMod.Commands;
 using CommandMod.UI;
 using ModLoader;
+using ModLoader.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,11 @@ using UnityEngine;
 
 namespace CommandMod
 {
-    public class CommandMod : SFSMod
-    {
-        public static CommandMod Main;
+	public class CommandMod : Mod
+	{
+		public static CommandMod Main;
+
+		public KeySettings keys;
 
 		public event EventHandler<string> onMenssage;
 		private const int limit = 25;
@@ -19,42 +22,25 @@ namespace CommandMod
 		private Dictionary<string, BaseCommand> _commands = new Dictionary<string, BaseCommand>();
 
 		private ConsoleUI _console;
-		
-		public CommandMod() : base("commandMod", "Command Mod", "dani0105", "v1.x.x", "v1.0.0", "Add api for other modders to implement commands!, to start use this mod press 'P'")
-        {
+
+		public CommandMod() : base("commandMod", "Command Mod", "dani0105", "0.5.7", "v2.0.0", "Add api for other modders to implement commands!, to start use this mod press 'T'")
+		{
 			Main = this;
 			this._queue = new Queue<string>();
 		}
 
-        public override void load()
-        {
-            GameObject console = new GameObject("Command Mod");
-			this._console = console.AddComponent<ConsoleUI>();
-            UnityEngine.Object.DontDestroyOnLoad(console);
-            console.SetActive(true);
-			ConsoleCommand helpCommand = new ConsoleCommand("help", "Show all command information", "/help <command_name>", this.helpCommand);
-			ConsoleCommand clearCommand = new ConsoleCommand("clear", "clear all messages", "/clear", this.clearCommand);
-			this.registerCommand(helpCommand);
-			this.registerCommand(clearCommand);
-		}
-
-        public override void unload()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <summary>
+		/// <summary>
 		/// Here you can add new command for the console
 		/// </summary>
 		/// <param name="command"> command class </param>
 		public void registerCommand(BaseCommand command)
-        {
-            if (_commands.ContainsKey(command.Id))
-            {
-                throw new Exception($"{command.Id} has already been registered");
-            }
-            _commands.Add(command.Id, command);
-        }
+		{
+			if (_commands.ContainsKey(command.Id))
+			{
+				throw new Exception($"{command.Id} has already been registered");
+			}
+			_commands.Add(command.Id, command);
+		}
 
 		/// <summary>
 		/// check the user input to verify if a single menssage or a command
@@ -90,9 +76,9 @@ namespace CommandMod
 					this.addMenssage(response);
 					return;
 				}
-				this.addMenssage( $"'{commandString}' is not recognized as an internal or external command");
+				this.addMenssage($"'{commandString}' is not recognized as an internal or external command");
 			}
-			
+
 		}
 
 		private void addMenssage(string message)
@@ -156,5 +142,25 @@ namespace CommandMod
 			return "";
 		}
 
+		public override void Load()
+		{
+			// Load keybindings
+			KeySettings.Setup();
+
+			// Add console
+			GameObject console = new GameObject("Command Mod");
+			this._console = console.AddComponent<ConsoleUI>();
+			UnityEngine.Object.DontDestroyOnLoad(console);
+			console.SetActive(true);
+			ConsoleCommand helpCommand = new ConsoleCommand("help", "Show all command information", "/help <command_name>", this.helpCommand);
+			ConsoleCommand clearCommand = new ConsoleCommand("clear", "clear all messages", "/clear", this.clearCommand);
+			this.registerCommand(helpCommand);
+			this.registerCommand(clearCommand);
+		}
+
+		public override void Unload()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
